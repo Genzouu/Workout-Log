@@ -1,0 +1,19 @@
+.navbar {
+    border-bottom: 2px solid rgb(230, 230, 230);
+}
+
+.menu-link {
+    font-size: 40px;
+    text-decoration: none;
+    color: #000000;
+    padding: 20px;
+    display: inline-flex;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.menu-link:hover {
+    color: rgb(218, 61, 61);
+    background-color: rgb(245, 245, 245);
+}

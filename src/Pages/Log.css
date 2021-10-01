@@ -1,0 +1,7 @@
+input, button, select  {
+    font-size: 30px;
+}
+
+.inline-label {
+    padding-right: 16px;
+}
