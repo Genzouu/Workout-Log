@@ -5,3 +5,11 @@ input, button, select  {
 .inline-label {
     padding-right: 16px;
 }
+
+.calendar {
+    size: 10px;
+    width: 800px;
+    height: auto;
+    display: inline-flex;
+    flex-direction: column;
+}

@@ -1,4 +1,5 @@
 import React from 'react';
+import Calendar from 'react-calendar';
 
 import "./Log.css";
 
@@ -43,9 +44,9 @@ class Log extends React.Component<{}, LogState> {
         inputField.value = "";
     };
 
-    addEntry = (workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
+    addEntry = (date: Date, workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
         let newEntries = this.state.entries;
-        newEntries.set(workoutType.value, {workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+        newEntries.set(date.toDateString(), {date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
         this.setState({
             entries: newEntries
         });
@@ -58,9 +59,26 @@ class Log extends React.Component<{}, LogState> {
     }
 
     render() {
+        let selectedDate: Date;
+        let prevDateTarget: {target: HTMLButtonElement, style: string};
+
         return (
         <div>
-            <p>Enter workout information</p>
+            <div className="left">
+            <Calendar
+                className="calendar"
+                maxDate={new Date()} 
+                onClickDay={(value: Date, event: React.MouseEvent<HTMLButtonElement>) => {
+                    selectedDate = value;
+
+                    if (prevDateTarget) prevDateTarget.target.style.cssText = prevDateTarget.style;
+                    prevDateTarget = {target: (event.target as HTMLButtonElement), style: (event.target as HTMLButtonElement).style.cssText};
+
+                    (event.target as HTMLButtonElement).style.color="#DA3D3D";                   
+                }}
+            />
+            </div>
+            <div className="info" style={{marginTop: "20px"}}>
             <div className="workout-type">
                 <form>
                     <input id="workout-type-field" type="text" autoComplete="off"></input>
@@ -75,28 +93,29 @@ class Log extends React.Component<{}, LogState> {
             <div className="set">
                 <form>
                 <label className="inline-label" htmlFor="sets">Sets</label>
-                <input id="sets" maxLength={2}></input>
+                <input id="sets" maxLength={2} autoComplete="off"></input>
                 </form>
             </div>
             <div className="reps">
                 <form>
                 <label className="inline-label" htmlFor="reps">Repetitions</label>
-                <input id="reps" maxLength={4}></input>
+                <input id="reps" maxLength={4} autoComplete="off"></input>
                 </form>
             </div>
             <div className="weight">
                 <form>
                 <label className="inline-label" htmlFor="weight">Weight</label>
-                <input id="weight" maxLength={4}></input>
+                <input id="weight" maxLength={4} autoComplete="off"></input>
                 </form>
             </div>
-            <div>
-                <button style={{marginTop: "30px"}} onClick={() => this.addEntry((document.getElementById("workout-type-option") as HTMLSelectElement), (document.getElementById("sets") as HTMLInputElement), (document.getElementById("reps") as HTMLInputElement), (document.getElementById("weight") as HTMLInputElement))}>
+            <div style={{marginBottom:"20px"}}>
+                <button style={{marginTop: "30px"}} onClick={() => this.addEntry(selectedDate, (document.getElementById("workout-type-option") as HTMLSelectElement), (document.getElementById("sets") as HTMLInputElement), (document.getElementById("reps") as HTMLInputElement), (document.getElementById("weight") as HTMLInputElement))}>
                     Add Entry
                 </button>
                 <button onClick={() => this.resetFields(document.getElementsByTagName("input"))}>
                     Reset Fields
                 </button>
+            </div>
             </div>
         </div>
         );
