@@ -7,9 +7,18 @@ input, button, select  {
 }
 
 .calendar {
-    size: 10px;
     width: 800px;
-    height: auto;
     display: inline-flex;
     flex-direction: column;
+}
+
+.entry-info {
+    text-align: left;
+    height: 87vh;
+    width: 520px;
+    overflow: scroll;
+    overflow-x: hidden;
+    position: absolute;
+    top: 105px;
+    right: 15px;
 }

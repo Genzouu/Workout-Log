@@ -5,7 +5,7 @@ import "./Log.css";
 
 interface LogState {
     workoutTypes: string[];
-    entries: Map<number, {}>;
+    entries: {date: string, workoutType: string, sets: string, reps: string, weight: string}[];
     nextEntryID: number;
 }
 
@@ -16,7 +16,7 @@ class Log extends React.Component<{}, LogState> {
         
         this.state = {
             workoutTypes: [],
-            entries: new Map<number, {}>(),
+            entries: [],
             nextEntryID: 0,
         };
     }
@@ -47,16 +47,24 @@ class Log extends React.Component<{}, LogState> {
         inputField.value = "";
     };
 
-
-    count: number = 0;
     addEntry = (date: Date, workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
         let newEntries = this.state.entries;
         
-        newEntries.set(this.state.nextEntryID, {date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+        newEntries.push({date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
 
         this.setState({
             entries: newEntries,
             nextEntryID: (this.state.nextEntryID+1)
+        });
+    }
+
+    removeEntry = (index: number) => {
+        let newEntries = this.state.entries;
+
+        newEntries.splice(index, 1);
+        
+        this.setState({
+            entries: newEntries,
         });
     }
 
@@ -87,11 +95,14 @@ class Log extends React.Component<{}, LogState> {
                 }}
             />
             </div>
+
             <div className="info" style={{marginTop: "20px"}}>
             <div className="workout-type">
                 <form>
                     <input id="workout-type-field" type="text" autoComplete="off"></input>
-                    <button onClick={(e) => this.addWorkoutType(e, (document.getElementById("workout-type-field") as HTMLInputElement))}>Add Workout Type</button>
+                    <button onClick={(e) => this.addWorkoutType(e, (document.getElementById("workout-type-field") as HTMLInputElement))}>
+                        Add Exercise
+                    </button>
                 </form>
                 <select id="workout-type-option"style={{marginTop: "-10px"}}>
                 {this.state.workoutTypes.map((type: string) => (
@@ -126,7 +137,23 @@ class Log extends React.Component<{}, LogState> {
                 </button>
             </div>
             </div>
-        </div>
+            
+            <div className="entry-info">          
+                {this.state.entries.map((entry: {date: string, workoutType: string, sets: string, reps: string, weight: string}, index: number) => (
+                    <details key={entry.workoutType} style={{marginBottom: "20px"}}>
+                        <summary>
+                            {entry.workoutType}
+                            <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => this.removeEntry(index)}>Delete</button>
+                        </summary>
+                        <div style={{fontSize: "32px"}}>
+                        - Sets: {entry.sets}<br/>
+                        - Reps: {entry.reps}<br/>
+                        - Weight: {entry.weight}kg
+                        </div>
+                    </details>
+                ))}
+            </div>
+        </div> 
         );
     };
 }
