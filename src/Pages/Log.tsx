@@ -5,16 +5,19 @@ import "./Log.css";
 
 interface LogState {
     workoutTypes: string[];
-    entries: Map<string, {}>;
+    entries: Map<number, {}>;
+    nextEntryID: number;
 }
 
 class Log extends React.Component<{}, LogState> {
+
     constructor(props: any) {
         super(props);
         
         this.state = {
             workoutTypes: [],
-            entries: new Map<string, {}>(),
+            entries: new Map<number, {}>(),
+            nextEntryID: 0,
         };
     }
 
@@ -44,11 +47,16 @@ class Log extends React.Component<{}, LogState> {
         inputField.value = "";
     };
 
+
+    count: number = 0;
     addEntry = (date: Date, workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
         let newEntries = this.state.entries;
-        newEntries.set(date.toDateString(), {date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+        
+        newEntries.set(this.state.nextEntryID, {date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+
         this.setState({
-            entries: newEntries
+            entries: newEntries,
+            nextEntryID: (this.state.nextEntryID+1)
         });
     }
 
@@ -58,21 +66,22 @@ class Log extends React.Component<{}, LogState> {
         }
     }
 
-    render() {
-        let selectedDate: Date;
-        let prevDateTarget: {target: HTMLButtonElement, style: string};
+    selectedDate: Date = new Date();
+    prevDateTarget: {target: HTMLButtonElement | null, style: string} = {target: null, style: ""};
 
+    render() {
         return (
         <div>
             <div className="left">
             <Calendar
                 className="calendar"
+                minDate={new Date(Date.UTC(2001, 0, 1, 0, 0, 0, 0))}
                 maxDate={new Date()} 
                 onClickDay={(value: Date, event: React.MouseEvent<HTMLButtonElement>) => {
-                    selectedDate = value;
+                    this.selectedDate = value;
 
-                    if (prevDateTarget) prevDateTarget.target.style.cssText = prevDateTarget.style;
-                    prevDateTarget = {target: (event.target as HTMLButtonElement), style: (event.target as HTMLButtonElement).style.cssText};
+                    if (this.prevDateTarget.target) this.prevDateTarget.target.style.cssText = this.prevDateTarget.style;
+                    this.prevDateTarget = {target: (event.target as HTMLButtonElement), style: (event.target as HTMLButtonElement).style.cssText};
 
                     (event.target as HTMLButtonElement).style.color="#DA3D3D";                   
                 }}
@@ -82,7 +91,7 @@ class Log extends React.Component<{}, LogState> {
             <div className="workout-type">
                 <form>
                     <input id="workout-type-field" type="text" autoComplete="off"></input>
-                    <button onClick={(e) => this.addWorkoutType(e, (document.getElementById("workout-type-field") as HTMLInputElement))}>Add Workout</button>
+                    <button onClick={(e) => this.addWorkoutType(e, (document.getElementById("workout-type-field") as HTMLInputElement))}>Add Workout Type</button>
                 </form>
                 <select id="workout-type-option"style={{marginTop: "-10px"}}>
                 {this.state.workoutTypes.map((type: string) => (
@@ -109,7 +118,7 @@ class Log extends React.Component<{}, LogState> {
                 </form>
             </div>
             <div style={{marginBottom:"20px"}}>
-                <button style={{marginTop: "30px"}} onClick={() => this.addEntry(selectedDate, (document.getElementById("workout-type-option") as HTMLSelectElement), (document.getElementById("sets") as HTMLInputElement), (document.getElementById("reps") as HTMLInputElement), (document.getElementById("weight") as HTMLInputElement))}>
+                <button style={{marginTop: "30px"}} onClick={() => this.addEntry(this.selectedDate, (document.getElementById("workout-type-option") as HTMLSelectElement), (document.getElementById("sets") as HTMLInputElement), (document.getElementById("reps") as HTMLInputElement), (document.getElementById("weight") as HTMLInputElement))}>
                     Add Entry
                 </button>
                 <button onClick={() => this.resetFields(document.getElementsByTagName("input"))}>
