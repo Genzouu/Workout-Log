@@ -3,22 +3,22 @@ input, button, select  {
 }
 
 .inline-label {
-    padding-right: 16px;
+    padding-right: 1%;
 }
 
 .calendar {
-    width: 800px;
+    width: 35%;
     display: inline-flex;
     flex-direction: column;
 }
 
 .entry-info {
     text-align: left;
-    height: 87vh;
-    width: 520px;
+    height: 87%;
+    width: 29%;
     overflow: scroll;
     overflow-x: hidden;
     position: absolute;
-    top: 105px;
-    right: 15px;
+    top: 11%;
+    right: 0.5%;
 }

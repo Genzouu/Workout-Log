@@ -6,11 +6,11 @@
     font-size: 40px;
     text-decoration: none;
     color: #000000;
-    padding: 20px;
+    padding: 1%;
     display: inline-flex;
     align-items: center;
     margin: 0 auto;
-    max-width: 600px;
+    max-width: 10%;
 }
 
 .menu-link:hover {

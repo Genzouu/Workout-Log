@@ -80,7 +80,6 @@ class Log extends React.Component<{}, LogState> {
     render() {
         return (
         <div>
-            <div className="left">
             <Calendar
                 className="calendar"
                 minDate={new Date(Date.UTC(2001, 0, 1, 0, 0, 0, 0))}
@@ -94,7 +93,6 @@ class Log extends React.Component<{}, LogState> {
                     (event.target as HTMLButtonElement).style.color="#DA3D3D";                   
                 }}
             />
-            </div>
 
             <div className="info" style={{marginTop: "20px"}}>
             <div className="workout-type">
@@ -148,7 +146,7 @@ class Log extends React.Component<{}, LogState> {
                         <div style={{fontSize: "32px"}}>
                         - Sets: {entry.sets}<br/>
                         - Reps: {entry.reps}<br/>
-                        - Weight: {entry.weight}kg
+                        {parseInt(entry.weight) > 0 ? "- Weight: " + entry.weight + "kg" : ""}
                         </div>
                     </details>
                 ))}

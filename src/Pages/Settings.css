@@ -1,0 +1,8 @@
+.settings > * {
+    line-height: 60px;
+}
+
+.setting-label {
+    display: inline;
+    padding-right: 1%;
+}
