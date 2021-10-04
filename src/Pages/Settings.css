@@ -6,3 +6,11 @@
     display: inline;
     padding-right: 1%;
 }
+
+div.dropdown-container {
+    width:10px;
+}
+
+select.dropdown {
+    width:auto;
+}

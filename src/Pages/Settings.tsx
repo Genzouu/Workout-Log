@@ -18,6 +18,7 @@ export default function Settings() {
                 <select>
                     <option>English</option>
                     <option>日本語</option>
+                    <option>简体中文</option>
                 </select>
             </div>
         </div>

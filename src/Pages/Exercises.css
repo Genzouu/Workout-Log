@@ -1,0 +1,49 @@
+.exercise-info-entry {
+    margin-top: 0.5%;
+}
+
+input {
+    margin-bottom: 0.5%;
+}
+
+label {
+    padding-right: 0.75%;
+}
+
+.exercise-note-label, #exercise-note-textarea {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+textarea {
+    font-size: 22px;
+    height: 84px;
+    width: 20%;
+    resize: none;
+}
+
+b.entries-title {
+    display: block;
+    margin-top: 2%;
+    margin-bottom: -1.5%;
+}
+
+.exercise-entries-container {
+    width: 95%;
+    overflow: scroll;
+    overflow-x: hidden;
+    height: 55vh;
+}
+
+.exercise-entries-grid {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-auto-rows: 1fr 1fr;
+    height: fit-content;
+}
+
+.note {
+    font-size: 34px;
+    margin-top: 0%;
+    white-space: pre-line;
+}

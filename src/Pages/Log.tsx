@@ -50,7 +50,11 @@ class Log extends React.Component<{}, LogState> {
     addEntry = (date: Date, workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
         let newEntries = this.state.entries;
         
-        newEntries.push({date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+        if (workoutType.value !== "") {
+            newEntries.push({date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+        } else {
+            alert("Please choose an exercise type");
+        }
 
         this.setState({
             entries: newEntries,
@@ -108,24 +112,16 @@ class Log extends React.Component<{}, LogState> {
                 ))}
                 </select>             
             </div>
-            <div className="set">
-                <form>
-                <label className="inline-label" htmlFor="sets">Sets</label>
+            <form className="workout-info" onSubmit={() => { return false; }}>
+                <label className="workout-info-label" htmlFor="sets">Sets</label>
                 <input id="sets" maxLength={2} autoComplete="off"></input>
-                </form>
-            </div>
-            <div className="reps">
-                <form>
-                <label className="inline-label" htmlFor="reps">Repetitions</label>
+                <br />
+                <label className="workout-info-label" htmlFor="reps">Repetitions</label>
                 <input id="reps" maxLength={4} autoComplete="off"></input>
-                </form>
-            </div>
-            <div className="weight">
-                <form>
-                <label className="inline-label" htmlFor="weight">Weight</label>
+                <br />
+                <label className="workout-info-label" htmlFor="weight">Weight</label>
                 <input id="weight" maxLength={4} autoComplete="off"></input>
-                </form>
-            </div>
+            </form>
             <div style={{marginBottom:"20px"}}>
                 <button style={{marginTop: "30px"}} onClick={() => this.addEntry(this.selectedDate, (document.getElementById("workout-type-option") as HTMLSelectElement), (document.getElementById("sets") as HTMLInputElement), (document.getElementById("reps") as HTMLInputElement), (document.getElementById("weight") as HTMLInputElement))}>
                     Add Entry
