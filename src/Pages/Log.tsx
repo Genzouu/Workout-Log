@@ -6,18 +6,16 @@ import "./Log.css";
 interface LogState {
     workoutTypes: string[];
     entries: {date: string, workoutType: string, sets: string, reps: string, weight: string}[];
-    nextEntryID: number;
 }
 
-class Log extends React.Component<{}, LogState> {
+export default class Log extends React.Component<{}, LogState> {
 
     constructor(props: any) {
         super(props);
         
         this.state = {
             workoutTypes: [],
-            entries: [],
-            nextEntryID: 0,
+            entries:[],
         };
     }
 
@@ -58,7 +56,6 @@ class Log extends React.Component<{}, LogState> {
 
         this.setState({
             entries: newEntries,
-            nextEntryID: (this.state.nextEntryID+1)
         });
     }
 
@@ -151,5 +148,3 @@ class Log extends React.Component<{}, LogState> {
         );
     };
 }
-
-export default Log;
