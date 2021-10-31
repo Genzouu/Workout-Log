@@ -5,7 +5,7 @@ import { ExercisesAction } from '../Actions/exercisesAction'
 
 const initialState: ExercisesState['exercises'] = [];
 
-const reducer: Reducer<ExercisesState['exercises'], ExercisesAction> = (state = initialState, action) => {
+const exercisesReducer: Reducer<ExercisesState['exercises'], ExercisesAction> = (state = initialState, action) => {
     switch (action.type) {
         case ExercisesActionType.Add:
             return state.concat(action.payload);
@@ -19,4 +19,4 @@ const reducer: Reducer<ExercisesState['exercises'], ExercisesAction> = (state = 
     }
 }
 
-export default reducer;
+export default exercisesReducer;

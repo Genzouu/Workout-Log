@@ -2,13 +2,13 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { actionCreators, State } from '../State/index';
+import { exercisesActionCreators, State } from '../State/index';
 import './Exercises.css';
 
 export default function Exercises() {
 
     const dispatch = useDispatch();
-    const { addEntry, removeEntry } = bindActionCreators(actionCreators, dispatch);
+    const { addExerciseAC, removeExerciseAC } = bindActionCreators(exercisesActionCreators, dispatch);
     const entries = useSelector((state: State) => state.exercises);
 
     const addExercise = (event: React.MouseEvent<HTMLButtonElement>, nameField: HTMLInputElement, noteField: HTMLInputElement) => {
@@ -24,11 +24,11 @@ export default function Exercises() {
 
         let exercises: string[] = [];
         entries.forEach(exercise => {
-            exercises.push(exercise.name);
+            exercises.push(exercise.type);
         });
 
         if (!exercises.includes(formattedExercise)) {
-            addEntry({ name: formattedExercise, note: noteField.value });
+            addExerciseAC({ type: formattedExercise, note: noteField.value });
         }
 
         nameField.value = "";
@@ -37,32 +37,33 @@ export default function Exercises() {
 
     return (
         <div className="exercises">
-            <form className="exercise-info-entry" onSubmit={() => { return false; }}>
-                <label className="exercise-name-label" htmlFor="exercise-name-field">Exercise:</label>
-                <input id="exercise-name-field" type="text" autoComplete="off" maxLength={30}></input>
-                <br/>
-                <label className="exercise-note-label" htmlFor="exercise-note-textarea">Note:</label>
-                <textarea id="exercise-note-textarea" autoComplete="off"></textarea>
-            </form>
-            <button onClick={(e) => addExercise(e, (document.getElementById("exercise-name-field") as HTMLInputElement), (document.getElementById("exercise-note-textarea") as HTMLInputElement))}>
-                    Add Exercise
-            </button>
+            <div className="info-container">
+                <form className="info-form" onSubmit={() => {return false;}}>
+                    <div className="info-label-text">
+                        <label className="name-label" htmlFor="name-field">Exercise</label>
+                        <input id="name-field" type="text" autoComplete="off" maxLength={30}></input>
+                    </div>
+                    <div className="info-label-text">
+                        <label className="note-label" htmlFor="note-textarea">Note</label>
+                        <textarea id="note-textarea" autoComplete="off"></textarea>
+                    </div>
+                </form>
+                <button type="submit" onClick={(e) => addExercise(e, (document.getElementById("name-field") as HTMLInputElement), (document.getElementById("note-textarea") as HTMLInputElement))}>
+                        Add Exercise
+                </button>
+            </div>
 
-            <br/>
-
-            <b className="entries-title">{entries.length > 0 ? "Exercises" : ""}</b>
-            <div className="exercise-entries-container" style={{marginTop: "2%"}}>
-                <div className="exercise-entries-grid">
+            {/* <b className="entries-title">{entries.length > 0 ? "Exercises" : ""}</b> */}
+            <div className="entries-container" style={{marginTop: "2%"}}>
                 {entries.map((exercise, index: number) => (
-                <details key={exercise.name} style={{marginBottom:"1%", fontSize:"38px"}}>
+                <details className="entry" key={exercise.type} style={{marginBottom:"1%", fontSize:"38px"}}>
                     <summary>
-                        {exercise.name}
-                        <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => removeEntry(index)}>Delete</button>
+                        {exercise.type}
+                        <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => removeExerciseAC(index)}>X</button>
                     </summary>
-                    <p className="note">{exercise.note}</p>
+                    <p className="entry-note">{exercise.note}</p>
                 </details>
                 ))}
-                </div>
             </div>
         </div>
     );

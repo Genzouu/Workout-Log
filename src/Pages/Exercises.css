@@ -1,5 +1,18 @@
-.exercise-info-entry {
+.info-container {
+    width: 30%;
+    float: left;
+    padding-top: 1%;
+    padding-left: 1%;
+    margin-top: -1.5%;
+}
+
+.info-form {
     margin-top: 0.5%;
+}
+
+.info-label-text {
+    display: inline;
+    margin-bottom: 0.5%;
 }
 
 input {
@@ -10,7 +23,7 @@ label {
     padding-right: 0.75%;
 }
 
-.exercise-note-label, #exercise-note-textarea {
+.note-label, #note-textarea {
     display: inline-block;
     vertical-align: middle;
 }
@@ -18,16 +31,30 @@ label {
 textarea {
     font-size: 22px;
     height: 84px;
-    width: 20%;
+    width: 73%;
     resize: none;
 }
 
-b.entries-title {
-    display: block;
-    margin-top: 2%;
-    margin-bottom: -1.5%;
+.entry {
+    width: 65%;
+    border: 2px solid black;
+    float: right;  
+    padding-left: 0.5%;
+    padding-bottom: 0.35%;
+    margin-right: 1%;
+    text-align: left;
 }
 
+.entry-note {
+    font-size: 34px;
+    margin-top: 0%;
+    margin-bottom: -2px;
+    white-space: pre-line;
+}
+
+
+
+/*
 .exercise-entries-container {
     width: 95%;
     overflow: scroll;
@@ -41,9 +68,4 @@ b.entries-title {
     grid-auto-rows: 1fr 1fr;
     height: fit-content;
 }
-
-.note {
-    font-size: 34px;
-    margin-top: 0%;
-    white-space: pre-line;
-}
+*/

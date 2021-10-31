@@ -1,150 +1,100 @@
 import React from 'react';
 import Calendar from 'react-calendar';
+import { useDispatch, useSelector } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { logActionCreators, State } from '../State';
+import { useState } from 'react'
 
 import "./Log.css";
 
-interface LogState {
-    workoutTypes: string[];
-    entries: {date: string, workoutType: string, sets: string, reps: string, weight: string}[];
-}
+export default function Log() {
 
-export default class Log extends React.Component<{}, LogState> {
+    // Redux
+    const dispatch = useDispatch();
+    const { addEntryAC, removeEntryAC } = bindActionCreators(logActionCreators, dispatch);
+    const state = useSelector((state: State) => state);
 
-    constructor(props: any) {
-        super(props);
-        
-        this.state = {
-            workoutTypes: [],
-            entries:[],
-        };
-    }
+    // Hooks
+    const initialState: {selectedDate: Date, targetDateButton: HTMLButtonElement | null, style: string} = {
+        selectedDate: new Date(),
+        targetDateButton: null,
+        style: "",
+    }; 
+    const [dateState, setDateState] = useState(initialState);
 
-    addWorkoutType = (event: React.MouseEvent<HTMLButtonElement>, inputField: HTMLInputElement) => {
-        event?.preventDefault();
-        event?.stopPropagation();
-
-        let formattedType: string = inputField.value.charAt(0).toUpperCase() + inputField.value.substring(1, inputField.value.length);
-        for (let i = 1; i < formattedType.length-1; i++) {
-            if (formattedType.charAt(i-1) === ' ') {
-                formattedType = formattedType.substring(0, i) + formattedType.charAt(i).toUpperCase() + formattedType.substring(i+1, formattedType.length);
-            }
-        }
-
-        // array.push() adds empty entry if the array is empty
-        let newWorkoutTypes: string[] = this.state.workoutTypes;
-        if (newWorkoutTypes.length === 0) {
-            newWorkoutTypes[0] = formattedType;
-        } else if (!newWorkoutTypes.includes(formattedType)) {
-            newWorkoutTypes.push(formattedType);
-        }
-
-        this.setState({
-            workoutTypes: newWorkoutTypes
-        });
-
-        inputField.value = "";
-    };
-
-    addEntry = (date: Date, workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
-        let newEntries = this.state.entries;
-        
+    const addEntry = (date: Date, workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
         if (workoutType.value !== "") {
-            newEntries.push({date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+            addEntryAC({date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
         } else {
             alert("Please choose an exercise type");
         }
-
-        this.setState({
-            entries: newEntries,
-        });
     }
 
-    removeEntry = (index: number) => {
-        let newEntries = this.state.entries;
-
-        newEntries.splice(index, 1);
-        
-        this.setState({
-            entries: newEntries,
-        });
-    }
-
-    resetFields = (inputFields: HTMLCollectionOf<HTMLInputElement>) => {
+    const resetFields = (inputFields: HTMLCollectionOf<HTMLInputElement>) => {
         for (let i = 0; i < inputFields.length; i++) {
             inputFields[i].value = "";
         }
     }
 
-    selectedDate: Date = new Date();
-    prevDateTarget: {target: HTMLButtonElement | null, style: string} = {target: null, style: ""};
+    const onClickDate = (value: Date, event: React.MouseEvent<HTMLButtonElement>) => {
+        if (dateState.targetDateButton) dateState.targetDateButton.style.cssText = dateState.style;
+        setDateState({selectedDate: value, targetDateButton: (event.target as HTMLButtonElement), style: (event.target as HTMLButtonElement).style.cssText});
 
-    render() {
-        return (
-        <div>
-            <Calendar
-                className="calendar"
-                minDate={new Date(Date.UTC(2001, 0, 1, 0, 0, 0, 0))}
-                maxDate={new Date()} 
-                onClickDay={(value: Date, event: React.MouseEvent<HTMLButtonElement>) => {
-                    this.selectedDate = value;
+        (event.target as HTMLButtonElement).style.color="#DA3D3D";
+    }
 
-                    if (this.prevDateTarget.target) this.prevDateTarget.target.style.cssText = this.prevDateTarget.style;
-                    this.prevDateTarget = {target: (event.target as HTMLButtonElement), style: (event.target as HTMLButtonElement).style.cssText};
+    return (
+    <div>
+        <Calendar
+            className="calendar"
+            minDate={new Date(Date.UTC(2001, 0, 1, 0, 0, 0, 0))}
+            maxDate={new Date()} 
+            onClickDay={onClickDate}
+        />
 
-                    (event.target as HTMLButtonElement).style.color="#DA3D3D";                   
-                }}
-            />
-
-            <div className="info" style={{marginTop: "20px"}}>
-            <div className="workout-type">
-                <form>
-                    <input id="workout-type-field" type="text" autoComplete="off"></input>
-                    <button onClick={(e) => this.addWorkoutType(e, (document.getElementById("workout-type-field") as HTMLInputElement))}>
-                        Add Exercise
-                    </button>
-                </form>
-                <select id="workout-type-option"style={{marginTop: "-10px"}}>
-                {this.state.workoutTypes.map((type: string) => (
-                    <option key={type}>{type}</option>
-                ))}
-                </select>             
-            </div>
-            <form className="workout-info" onSubmit={() => { return false; }}>
-                <label className="workout-info-label" htmlFor="sets">Sets</label>
-                <input id="sets" maxLength={2} autoComplete="off"></input>
-                <br />
-                <label className="workout-info-label" htmlFor="reps">Repetitions</label>
-                <input id="reps" maxLength={4} autoComplete="off"></input>
-                <br />
-                <label className="workout-info-label" htmlFor="weight">Weight</label>
-                <input id="weight" maxLength={4} autoComplete="off"></input>
-            </form>
-            <div style={{marginBottom:"20px"}}>
-                <button style={{marginTop: "30px"}} onClick={() => this.addEntry(this.selectedDate, (document.getElementById("workout-type-option") as HTMLSelectElement), (document.getElementById("sets") as HTMLInputElement), (document.getElementById("reps") as HTMLInputElement), (document.getElementById("weight") as HTMLInputElement))}>
-                    Add Entry
-                </button>
-                <button onClick={() => this.resetFields(document.getElementsByTagName("input"))}>
-                    Reset Fields
-                </button>
-            </div>
-            </div>
-            
-            <div className="entry-info">          
-                {this.state.entries.map((entry: {date: string, workoutType: string, sets: string, reps: string, weight: string}, index: number) => (
-                    <details key={entry.workoutType} style={{marginBottom: "20px"}}>
-                        <summary>
-                            {entry.workoutType}
-                            <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => this.removeEntry(index)}>Delete</button>
-                        </summary>
-                        <div style={{fontSize: "32px"}}>
-                        - Sets: {entry.sets}<br/>
-                        - Reps: {entry.reps}<br/>
-                        {parseInt(entry.weight) > 0 ? "- Weight: " + entry.weight + "kg" : ""}
-                        </div>
-                    </details>
-                ))}
-            </div>
-        </div> 
-        );
-    };
+        <div className="info" style={{marginTop: "20px"}}>
+        <div className="workout-type">
+            <select id="workout-type-option"style={{marginTop: "-10px"}}>
+            {state.exercises.map((exercise: {type: string}) => (
+                <option key={exercise.type}>{exercise.type}</option>
+            ))}
+            </select>
+        </div>
+        <form className="workout-info" onSubmit={() => { return false; }}>
+            <label className="workout-info-label" htmlFor="sets">Sets</label>
+            <input id="sets" maxLength={2} autoComplete="off"></input>
+            <br />
+            <label className="workout-info-label" htmlFor="reps">Repetitions</label>
+            <input id="reps" maxLength={4} autoComplete="off"></input>
+            <br />
+            <label className="workout-info-label" htmlFor="weight">Weight</label>
+            <input id="weight" maxLength={4} autoComplete="off"></input>
+        </form>
+        <div style={{marginBottom:"20px"}}>
+            <button style={{marginTop: "30px"}} onClick={() => addEntry(dateState.selectedDate, (document.getElementById("workout-type-option") as HTMLSelectElement), (document.getElementById("sets") as HTMLInputElement), (document.getElementById("reps") as HTMLInputElement), (document.getElementById("weight") as HTMLInputElement))}>
+                Add Entry
+            </button>
+            <button onClick={() => resetFields(document.getElementsByTagName("input"))}>
+                Reset Fields
+            </button>
+        </div>
+        </div>
+        
+        <div className="entry-info">          
+            {state.workoutEntries.map((entry: {date: string, workoutType: string, sets: string, reps: string, weight: string}, index: number) => (
+                <details key={entry.workoutType} style={{marginBottom: "20px"}}>
+                    <summary>
+                        {entry.workoutType}
+                        <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => removeEntryAC(index)}>Delete</button>
+                    </summary>
+                    <div style={{fontSize: "32px"}}>
+                    - Sets: {entry.sets}<br/>
+                    - Reps: {entry.reps}<br/>
+                    {parseInt(entry.weight) > 0 ? "- Weight: " + entry.weight + "kg" : ""}
+                    </div>
+                </details>
+            ))}
+        </div>
+    </div> 
+    );
 }

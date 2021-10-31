@@ -1,8 +1,10 @@
 import { combineReducers } from "redux";
 import exercisesReducer from './exercisesReducer'
+import logReducer from "./logReducer";
 
 const reducers = combineReducers({
-    exercises: exercisesReducer
+    exercises: exercisesReducer,
+    workoutEntries: logReducer,
 });
 
 export default reducers;
