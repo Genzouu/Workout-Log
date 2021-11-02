@@ -1,3 +1,3 @@
 export default interface LogState {
-    entries: {date: string, workoutType: string, sets: string, reps: string, weight: string}[];
+    entries: {date: string, exercise: string, sets: number, reps: number, weight: number}[];
 }

@@ -3,7 +3,7 @@
     float: left;
     padding-top: 1%;
     padding-left: 1%;
-    margin-top: -1.5%;
+    margin-top: 0.5%;
 }
 
 .info-form {
@@ -30,18 +30,47 @@ label {
 
 textarea {
     font-size: 22px;
-    height: 84px;
-    width: 73%;
+    height: 170px;
+    width: 74%;
     resize: none;
 }
 
-.entry {
+#search-field {
+    margin-top: 2%;
+    margin-bottom: -1%;
+    width: 55%;
+}
+
+.entries-container {
     width: 65%;
-    border: 2px solid black;
-    float: right;  
+    height: 71vh;
     padding-left: 0.5%;
-    padding-bottom: 0.35%;
-    margin-right: 1%;
+    padding-top: 0.6%;
+    margin-right: 2%;
+    border: 2px solid grey;
+    float: right;
+    overflow: scroll;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+html {
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+::-webkit-scrollbar {
+    width: 0;  /* Remove scrollbar space */
+}
+
+.entry {
+    width: 98.5%;
+    border: 2px solid black;
+    float: right;
+    padding-bottom: 0.5%;
+    padding-left: 0.5%;
+    margin-right: 0.7%;
+    margin-bottom: -5.5%;
     text-align: left;
 }
 
@@ -51,8 +80,6 @@ textarea {
     margin-bottom: -2px;
     white-space: pre-line;
 }
-
-
 
 /*
 .exercise-entries-container {

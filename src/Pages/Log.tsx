@@ -22,9 +22,9 @@ export default function Log() {
     }; 
     const [dateState, setDateState] = useState(initialState);
 
-    const addEntry = (date: Date, workoutType: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
-        if (workoutType.value !== "") {
-            addEntryAC({date: date.toDateString(), workoutType: workoutType.value, sets: setsField.value, reps: repsField.value, weight: weightField.value});
+    const addEntry = (date: Date, exercise: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
+        if (exercise.value !== "") {
+            addEntryAC({date: date.toDateString(), exercise: exercise.value, sets: parseInt(setsField.value), reps: parseInt(repsField.value), weight: parseFloat(weightField.value)});
         } else {
             alert("Please choose an exercise type");
         }
@@ -41,6 +41,21 @@ export default function Log() {
         setDateState({selectedDate: value, targetDateButton: (event.target as HTMLButtonElement), style: (event.target as HTMLButtonElement).style.cssText});
 
         (event.target as HTMLButtonElement).style.color="#DA3D3D";
+    }
+
+    const addEntriesDebug = () => {
+        addEntryAC({date: "Mon Nov 01 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 10});
+        addEntryAC({date: "Mon Nov 01 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 10});
+        addEntryAC({date: "Mon Nov 02 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 15});
+        addEntryAC({date: "Mon Nov 02 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 10});
+        addEntryAC({date: "Mon Nov 01 2021", exercise: "Tricep Extension", sets: 2, reps: 10, weight: 12});
+        addEntryAC({date: "Mon Nov 01 2021", exercise: "Tricep Extension", sets: 3, reps: 15, weight: 12});
+        addEntryAC({date: "Mon Nov 02 2021", exercise: "Tricep Extension", sets: 2, reps: 10, weight: 10});
+        addEntryAC({date: "Mon Nov 02 2021", exercise: "Tricep Extension", sets: 3, reps: 17, weight: 10});
+        addEntryAC({date: "Mon Nov 02 2021", exercise: "Tricep Extension", sets: 1, reps: 11, weight: 20});
+        addEntryAC({date: "Mon Nov 01 2021", exercise: "Pullup", sets: 1, reps: 10, weight: 10});
+        addEntryAC({date: "Mon Nov 01 2021", exercise: "Pullup", sets: 3, reps: 10, weight: 0});
+        addEntryAC({date: "Mon Nov 02 2021", exercise: "Pullup", sets: 3, reps: 15, weight: 0});
     }
 
     return (
@@ -77,20 +92,21 @@ export default function Log() {
             <button onClick={() => resetFields(document.getElementsByTagName("input"))}>
                 Reset Fields
             </button>
+            <button onClick={() => addEntriesDebug()}>Add Entries Debug</button>
         </div>
         </div>
         
         <div className="entry-info">          
-            {state.workoutEntries.map((entry: {date: string, workoutType: string, sets: string, reps: string, weight: string}, index: number) => (
-                <details key={entry.workoutType} style={{marginBottom: "20px"}}>
+            {state.workoutEntries.map((entry, index: number) => (
+                <details key={entry.exercise} style={{marginBottom: "20px"}}>
                     <summary>
-                        {entry.workoutType}
+                        {entry.exercise}
                         <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => removeEntryAC(index)}>Delete</button>
                     </summary>
                     <div style={{fontSize: "32px"}}>
                     - Sets: {entry.sets}<br/>
                     - Reps: {entry.reps}<br/>
-                    {parseInt(entry.weight) > 0 ? "- Weight: " + entry.weight + "kg" : ""}
+                    {entry.weight > 0 ? "- Weight: " + entry.weight + "kg" : ""}
                     </div>
                 </details>
             ))}
