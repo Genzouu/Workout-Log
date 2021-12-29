@@ -6,7 +6,7 @@ import LogState from '../Types/logState';
 
 function Statistics() {
 
-    const entries = useSelector((state: State) => state.workoutEntries);
+    const entries = useSelector((state: State) => state.entries);
 
     const getGraphData = () : {
         label: string,
@@ -70,32 +70,32 @@ function Statistics() {
     }
 
     /* Example so I don't forget how it's meant to look */
-    const data2 = {
-        labels: ['1', '2', '3', '4', '5'],
-        datasets: [
-            {
-                label: "Pushups",
-                data: [10, 11, 9, 18, 2, 20],
-                fill: false,
-                backgroundColor: '#ba3434',
-                borderColor: '#da3d3d',
-            },
-            {
-                label: "Situps",
-                data: [20, 25, 28, 1, 2, 30],
-                fill: false,
-                backgroundColor: '#3477ba',
-                borderColor: '#3d85da',
-            },
-            {
-                label: "Hanging Leg Raises",
-                data: [8, 12, 16],
-                fill: false,
-                backgroundColor: '#6d34ba',
-                borderColor: '#793dda',
-            },
-        ],
-    }; 
+    // const data2 = {
+    //     labels: ['1', '2', '3', '4', '5'],
+    //     datasets: [
+    //         {
+    //             label: "Pushups",
+    //             data: [10, 11, 9, 18, 2, 20],
+    //             fill: false,
+    //             backgroundColor: '#ba3434',
+    //             borderColor: '#da3d3d',
+    //         },
+    //         {
+    //             label: "Situps",
+    //             data: [20, 25, 28, 1, 2, 30],
+    //             fill: false,
+    //             backgroundColor: '#3477ba',
+    //             borderColor: '#3d85da',
+    //         },
+    //         {
+    //             label: "Hanging Leg Raises",
+    //             data: [8, 12, 16],
+    //             fill: false,
+    //             backgroundColor: '#6d34ba',
+    //             borderColor: '#793dda',
+    //         },
+    //     ],
+    // }; 
 
 
     return (

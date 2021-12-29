@@ -4,7 +4,7 @@ import { LogActionType } from '../Action Types/logActionType'
 import { LogAction } from '../Actions/logAction'
 
 export const addEntryAC = (entry: LogState['entries'][0]) => {
-    return (dispatch: Dispatch<LogAction>) => {
+    return (dispatch: Dispatch<LogAction>) => {   
         dispatch({
             type: LogActionType.AddEntry,
             payload: entry,

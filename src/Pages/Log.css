@@ -12,7 +12,7 @@ input, button, select  {
     flex-direction: column;
 }
 
-.entry-info {
+.recent-entry-info {
     text-align: left;
     height: 87%;
     width: 29%;

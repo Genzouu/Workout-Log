@@ -7,13 +7,15 @@ const initialState: LogState['entries'] = [];
 
 const logReducer: Reducer<LogState['entries'], LogAction> = (state = initialState, action) => {
     switch (action.type) {
-        case LogActionType.AddEntry:
-            return state.concat(action.payload);
-        case LogActionType.RemoveEntry:
+        case LogActionType.AddEntry: {
+            return [...state.concat(action.payload)];
+        }
+        case LogActionType.RemoveEntry: {
             let newState = state;
             newState.splice(action.removeIndex, 1);
             
             return [...newState];
+        }
         default:
             return state;
     }

@@ -41,7 +41,8 @@ export default function Exercises() {
     };
 
     const removeExercise = (index: number) => {
-        removeExerciseAC(index);
+        let entriesIndex = entries.findIndex(e => e === filteredEntries[index]);
+        removeExerciseAC(entriesIndex);
         filteredEntries.splice(index, 1);
     }
 
@@ -85,14 +86,14 @@ export default function Exercises() {
                     Clear
                 </button>
             </div>
-            <div className="entries-container" style={{marginTop: "2%"}}>
+            <div className="exercises-container" style={{marginTop: "2%"}}>
                 {filteredEntries.map((exercise, index: number) => (
-                <details className="entry" key={exercise.type} style={{marginBottom:"1%", fontSize:"38px"}}>
+                <details className="exercise" key={exercise.type} style={{marginBottom:"1%", fontSize:"38px"}}>
                     <summary>
                         {exercise.type}
                         <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => removeExercise(index)}>X</button>
                     </summary>
-                    <p className="entry-note">{exercise.note}</p>
+                    <p className="exercise-note">{exercise.note}</p>
                 </details>
                 ))}
             </div>

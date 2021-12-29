@@ -6,6 +6,7 @@ import { logActionCreators, State } from '../State';
 import { useState } from 'react'
 
 import "./Log.css";
+import LogState from '../Types/logState';
 
 export default function Log() {
 
@@ -15,19 +16,40 @@ export default function Log() {
     const state = useSelector((state: State) => state);
 
     // Hooks
-    const initialState: {selectedDate: Date, targetDateButton: HTMLButtonElement | null, style: string} = {
-        selectedDate: new Date(),
+    const dateInitState: {selectedDate: Date | null, targetDateButton: HTMLButtonElement | null, style: string} = {
+        selectedDate: null,
         targetDateButton: null,
         style: "",
     }; 
-    const [dateState, setDateState] = useState(initialState);
+    const [dateState, setDateState] = useState(dateInitState);
 
-    const addEntry = (date: Date, exercise: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
-        if (exercise.value !== "") {
-            addEntryAC({date: date.toDateString(), exercise: exercise.value, sets: parseInt(setsField.value), reps: parseInt(repsField.value), weight: parseFloat(weightField.value)});
-        } else {
+    const logInitState: LogState['entries'] = [];
+    const [logState, setLogState] = useState(logInitState);
+
+    const addEntry = (date: Date | null, exercise: HTMLSelectElement, setsField: HTMLInputElement, repsField: HTMLInputElement, weightField: HTMLInputElement) => {
+        if (date === null) {
+            alert("Please choose a date");
+        } else if (exercise.value === "") {
             alert("Please choose an exercise type");
+        } else if (setsField.value === "" || repsField.value === "") {
+            alert("Please enter the number of sets and reps");
+        } else {
+            let entry = {date: date.toDateString(), exercise: exercise.value, sets: parseInt(setsField.value), reps: parseInt(repsField.value), weight: parseFloat(weightField.value)};
+            
+            let tempLog = logState;
+            tempLog.push(entry);
+            setLogState(tempLog);
+            
+            addEntryAC(entry);
         }
+    }
+
+    const removeEntry = (index: number) => {
+        removeEntryAC(index + state.log.length - logState.length);
+
+        let newLog = logState;
+        newLog.splice(index, 1);
+        setLogState(newLog);
     }
 
     const resetFields = (inputFields: HTMLCollectionOf<HTMLInputElement>) => {
@@ -36,7 +58,7 @@ export default function Log() {
         }
     }
 
-    const onClickDate = (value: Date, event: React.MouseEvent<HTMLButtonElement>) => {
+    const onClickDate = (value: Date | null, event: React.MouseEvent<HTMLButtonElement>) => {
         if (dateState.targetDateButton) dateState.targetDateButton.style.cssText = dateState.style;
         setDateState({selectedDate: value, targetDateButton: (event.target as HTMLButtonElement), style: (event.target as HTMLButtonElement).style.cssText});
 
@@ -46,16 +68,20 @@ export default function Log() {
     const addEntriesDebug = () => {
         addEntryAC({date: "Mon Nov 01 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 10});
         addEntryAC({date: "Mon Nov 01 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 10});
+        addEntryAC({date: "Mon Nov 01 2021", exercise: "Pushup", sets: 3, reps: 15, weight: 0});
         addEntryAC({date: "Mon Nov 02 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 15});
         addEntryAC({date: "Mon Nov 02 2021", exercise: "Bicep Curl", sets: 3, reps: 10, weight: 10});
         addEntryAC({date: "Mon Nov 01 2021", exercise: "Tricep Extension", sets: 2, reps: 10, weight: 12});
         addEntryAC({date: "Mon Nov 01 2021", exercise: "Tricep Extension", sets: 3, reps: 15, weight: 12});
         addEntryAC({date: "Mon Nov 02 2021", exercise: "Tricep Extension", sets: 2, reps: 10, weight: 10});
-        addEntryAC({date: "Mon Nov 02 2021", exercise: "Tricep Extension", sets: 3, reps: 17, weight: 10});
+        addEntryAC({date: "Mon Nov 02 2021", exercise: "Tricep Extension", sets: 3, reps: 10, weight: 10});
         addEntryAC({date: "Mon Nov 02 2021", exercise: "Tricep Extension", sets: 1, reps: 11, weight: 20});
         addEntryAC({date: "Mon Nov 01 2021", exercise: "Pullup", sets: 1, reps: 10, weight: 10});
         addEntryAC({date: "Mon Nov 01 2021", exercise: "Pullup", sets: 3, reps: 10, weight: 0});
         addEntryAC({date: "Mon Nov 02 2021", exercise: "Pullup", sets: 3, reps: 15, weight: 0});
+        addEntryAC({date: "Mon Nov 03 2021", exercise: "Pullup", sets: 3, reps: 15, weight: 0});
+        addEntryAC({date: "Mon Nov 03 2021", exercise: "Tricep Extension", sets: 3, reps: 15, weight: 0});
+        addEntryAC({date: "Mon Nov 03 2021", exercise: "Pushup", sets: 3, reps: 15, weight: 0});
     }
 
     return (
@@ -96,12 +122,12 @@ export default function Log() {
         </div>
         </div>
         
-        <div className="entry-info">          
-            {state.workoutEntries.map((entry, index: number) => (
-                <details key={entry.exercise} style={{marginBottom: "20px"}}>
+        <div className="recent-entry-info">
+            {logState.map((entry, index: number) => (
+                <details key={index} style={{marginBottom: "20px"}}>
                     <summary>
                         {entry.exercise}
-                        <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => removeEntryAC(index)}>Delete</button>
+                        <button style={{fontSize:"28px", marginLeft: "20px", marginTop: "10px"}} onClick={() => removeEntry(index)}>Delete</button>
                     </summary>
                     <div style={{fontSize: "32px"}}>
                     - Sets: {entry.sets}<br/>

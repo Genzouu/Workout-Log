@@ -41,7 +41,7 @@ textarea {
     width: 55%;
 }
 
-.entries-container {
+.exercises-container {
     width: 65%;
     height: 71vh;
     padding-left: 0.5%;
@@ -54,16 +54,11 @@ textarea {
     -ms-overflow-style: none;  /* Internet Explorer 10+ */
 }
 
-html {
-    overflow: scroll;
-    overflow-x: hidden;
-}
-
 ::-webkit-scrollbar {
     width: 0;  /* Remove scrollbar space */
 }
 
-.entry {
+.exercise {
     width: 98.5%;
     border: 2px solid black;
     float: right;
@@ -74,25 +69,9 @@ html {
     text-align: left;
 }
 
-.entry-note {
+.exercise-note {
     font-size: 34px;
     margin-top: 0%;
     margin-bottom: -2px;
     white-space: pre-line;
 }
-
-/*
-.exercise-entries-container {
-    width: 95%;
-    overflow: scroll;
-    overflow-x: hidden;
-    height: 55vh;
-}
-
-.exercise-entries-grid {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-auto-rows: 1fr 1fr;
-    height: fit-content;
-}
-*/
